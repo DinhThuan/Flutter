@@ -1,84 +1,68 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:english_words/english_words.dart';
+import 'dart:developer';
 
-Future<Post> fetchPost() async {
-  final response =
-      await http.get('https://jsonplaceholder.typicode.com/posts/1');
+void main() => runApp(new MyApp());
 
-  if (response.statusCode == 200) {
-    // If the call to the server was successful, parse the JSON.
-    return Post.fromJson(json.decode(response.body));
-  } else {
-    // If that call was not successful, throw an error.
-    throw Exception('Failed to load post');
-  }
-}
-
-class Post {
-  final int userId;
-  final int id;
-  final String title;
-  final String body;
-
-  Post({this.userId, this.id, this.title, this.body});
-
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-      body: json['body'],
-    );
-  }
-}
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
-
+class RandomEnglishWords extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return new RandomEnglishWordsState();
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  Future<Post> post;
-
-  @override
-  void initState() {
-    super.initState();
-    post = fetchPost();
-  }
-
+//state
+class RandomEnglishWordsState extends State<RandomEnglishWords> {
+  final _words = <WordPair>[];
+  final _checkedWords = new Set<WordPair>();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fetch Data Example',
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+    final wordPair = new WordPair.random();
+    // TODO: implement build
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("list of english words".toUpperCase()),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Fetch Data Example'),
-        ),
-        body: Center(
-          child: FutureBuilder<Post>(
-            future: post,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.title + ' thuan');
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            },
-          ),
-        ),
-      ),
+      body: new ListView.builder(itemBuilder: (context, index) {
+        if (index >= _words.length) {
+          _words.addAll(generateWordPairs().take(10));
+        }
+        return _buildRow(_words[index], index);
+      }),
     );
+  }
+
+  Widget _buildRow(WordPair wordPair, int index) {
+    final textColor = index % 2 == 0 ? Colors.red : Colors.blue;
+    final isChecked = _checkedWords.contains(wordPair);
+    return new ListTile(
+      leading: new Icon(
+        isChecked ? Icons.check_box : Icons.check_box_outline_blank,
+        color: textColor,
+      ),
+      title: new Text(
+        wordPair.asUpperCase,
+        style: new TextStyle(fontSize: 18.0, color: textColor),
+      ),
+      onTap: () {
+        setState(() {
+          if (isChecked) {
+            _checkedWords.remove(wordPair);
+          } else {
+            _checkedWords.add(wordPair);
+          }
+        });
+      },
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new MaterialApp(
+        title: "Flutter app demo", home: new RandomEnglishWords());
   }
 }
