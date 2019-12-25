@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Fetch Data Example',
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
@@ -69,10 +69,11 @@ class _MyAppState extends State<MyApp> {
             future: post,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data.title + ' thuan');
+                return Text(snapshot.data.title);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
+
               // By default, show a loading spinner.
               return CircularProgressIndicator();
             },
