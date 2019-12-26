@@ -30,14 +30,49 @@ class MyApp extends StatelessWidget {
               ],
             ),
           ),
-          new Icon(Icons.favorite, color: Colors.red,),
+          new Icon(
+            Icons.favorite,
+            color: Colors.red,
+          ),
           new Text(
             "100",
             style: new TextStyle(fontSize: 16.0),
           )
-          
         ],
       ),
+    );
+    Widget buildButton(IconData icon, String buttonTitle) {
+      final Color tintColor = Colors.blue;
+      return new Column(
+        children: <Widget>[
+          new Icon(icon, color: tintColor),
+          new Container(
+            margin: const EdgeInsets.only(top: 5.0),
+            child: new Text(buttonTitle,
+                style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: tintColor)),
+          )
+        ],
+      );
+    }
+
+    Widget fourButtonsSection = new Container(
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          buildButton(Icons.home, "Home"),
+          buildButton(Icons.arrow_back, "Back"),
+          buildButton(Icons.arrow_forward, "Next"),
+          buildButton(Icons.share, "Share"),
+        ],
+      ),
+    );
+    final bottomTextSection = new Container(
+      padding: const EdgeInsets.all(10.0),
+        child: new Text(
+            ''' this is text leng long this is text leng long  this is text leng long  this is text leng long  this is text leng long this is text leng long this is text leng long  this is text leng long  this is text leng long  this is text leng long  this is text leng long this is text leng long  this is text leng long  this is text leng long  this is text leng long  this is text leng long this is text leng long  this is text leng long  this is text leng long  this is text leng long  this is text leng long this is text leng long  this is text leng long  this is text leng long  this is text leng long ''', style: new TextStyle(color: Colors.grey[850], fontSize: 16.0),)
     );
     // TODO: implement build
     return new MaterialApp(
@@ -49,7 +84,9 @@ class MyApp extends StatelessWidget {
           body: new ListView(
             children: <Widget>[
               new Image.asset('images/samsungA20.png', fit: BoxFit.cover),
-              titleSection
+              titleSection,
+              fourButtonsSection,
+              bottomTextSection
             ],
           )),
     );
